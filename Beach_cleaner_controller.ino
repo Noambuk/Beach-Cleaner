@@ -9,9 +9,9 @@ int switchPin = 3;
 int ButtonState = HIGH;
 
 bool state = true;
-int mode = 10;
-
-int pickupCommand = 5;
+int changeMode = 40;
+int doNothing = 39;
+int pickupCommand = 35;
 
 void setup() {
     Controller.enableTransmit(2);
@@ -26,7 +26,7 @@ void loop() {
 
     if (switchState == LOW) {
         Serial.println("The joystick is pressed");
-        Controller.send(5, 4);
+        Controller.send(pickupCommand, 8);
     }
 
     int joystickXValue = analogRead(joystickXPin);
@@ -41,17 +41,17 @@ void loop() {
         while(i<8)
         {
         Serial.println(i);
-        Controller.send(10, 4);
+        Controller.send(changeMode, 8);
         delay(5);
         i++;
         }
     }
     else if (direction != -1) {
-        Controller.send(direction, 4);
+        Controller.send(direction, 8);
         Serial.println(direction);
     } else {
         // Joystick is not touched (right in the middle)
-        Controller.send(9, 4);
+        Controller.send(doNothing, 8);
     }
 }
 
@@ -60,13 +60,13 @@ int getJoystickDirection(int x, int y) {
     int yThreshold = 512;
 
     if (y < yThreshold - 50) {
-        return 3;
+        return 33;
     } else if (y > yThreshold + 50) {
-        return 4;
+        return 34;
     } else if (x < xThreshold - 50) {
-        return 2;
+        return 32;
     } else if (x > xThreshold + 100) {
-        return 1;
+        return 31;
     } else {
         return -1;
     }
